@@ -29,12 +29,17 @@ class ChatbotWindow(QMainWindow):
         self.show()
 
     def send_message(self):
+        # Get user input
         user_input = self.input_field.text().strip()
         self.chat_area.append(f"Me: {user_input}")
         self.input_field.clear()
 
+        # Send input to openai
         chatbot = Chatbot()
+        response = chatbot.get_response(user_input)
 
+        # Display response
+        self.chat_area.append(f"Chatbot: {response.strip()}")
 
 app = QApplication(sys.argv)
 main_window = ChatbotWindow()
