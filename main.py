@@ -21,6 +21,7 @@ class ChatbotWindow(QMainWindow):
         # Add the input field widget
         self.input_field = QLineEdit(self)
         self.input_field.setGeometry(10, 340, 480, 40)
+        self.input_field.returnPressed.connect(self.send_message)
 
         # Add the button
         self.button = QPushButton("Send", self)
@@ -37,6 +38,7 @@ class ChatbotWindow(QMainWindow):
 
         # In separate thread call chatbot
         thread = threading.Thread(target=self.get_bot_response, args=(user_input, ))
+        thread.start()
 
     def get_bot_response(self, user_input):
         # Send input to openai and get response
