@@ -3,7 +3,7 @@ import openai
 
 class Chatbot:
     def __init__(self):
-        openai.api_key = "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"
+        openai.api_key = "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"
 
     def get_response(self, user_input):
         response = openai.Completion.create(
@@ -13,3 +13,9 @@ class Chatbot:
             temperature=0.5
         ).choices[0].text
         return response
+
+
+if __name__ == "__main__":
+    chatbot = Chatbot()
+    response = chatbot.get_response("Write a joke about birds.")
+    print(response)
