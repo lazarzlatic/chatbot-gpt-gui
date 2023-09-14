@@ -1,5 +1,5 @@
 import sys
-
+import threading
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTextEdit, QPushButton, QLineEdit
 from backend import Chatbot
 
@@ -7,6 +7,7 @@ from backend import Chatbot
 class ChatbotWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.chatbot = Chatbot()
 
         # Main Window
         self.setMinimumSize(700, 500)
@@ -31,15 +32,18 @@ class ChatbotWindow(QMainWindow):
     def send_message(self):
         # Get user input
         user_input = self.input_field.text().strip()
-        self.chat_area.append(f"Me: {user_input}")
+        self.chat_area.append(f"<p style='color:#333333'>Me: {user_input}</p>")
         self.input_field.clear()
 
-        # Send input to openai
-        chatbot = Chatbot()
-        response = chatbot.get_response(user_input)
+        # In separate thread call chatbot
+        thread = threading.Thread(target=self.get_bot_response, args=(user_input, ))
 
+    def get_bot_response(self, user_input):
+        # Send input to openai and get response
+        response = self.chatbot.get_response(user_input)
         # Display response
-        self.chat_area.append(f"Chatbot: {response.strip()}")
+        self.chat_area.append(f"<p style='color:#333333; background-color:#E9E9E9'>Bot: {response.strip()}</p>")
+
 
 app = QApplication(sys.argv)
 main_window = ChatbotWindow()
